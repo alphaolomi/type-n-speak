@@ -1,6 +1,39 @@
 import { useEffect, useState } from "react";
 
-export const useSpeechSynthesis = ({ onEnd }: { onEnd: () => void }) => {
+/**
+ * useSpeechSynthesis
+ * 
+ * ## Params 
+ * - `onStart` called when starting speaking, 
+ * - `onEnd` called when end speaking
+ * 
+ * 
+ * ```typescript
+ * const useSpeechSynthesis: ({ onStart, onEnd, }: {
+ *     onEnd?: (() => void) | undefined;
+ *     onStart?: (() => void) | undefined;
+ * }) => {
+ *     supported: boolean;
+ *     speak: (args: {
+ *         voice: SpeechSynthesisVoice | undefined | null;
+ *         text: string;
+ *         rate?: number | undefined;
+ *         pitch?: number | undefined;
+ *         volume?: number | undefined;
+ *     }) => void;
+ *     speaking: boolean;
+ *     cancel: () => void;
+ *     voices: SpeechSynthesisVoice[] | null;
+ * }
+ * ```
+ */
+export const useSpeechSynthesis = ({
+  onStart = () => {},
+  onEnd = () => {},
+}: {
+  onEnd?: () => void;
+  onStart?: () => void;
+}) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[] | null>(null);
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
@@ -56,6 +89,7 @@ export const useSpeechSynthesis = ({ onEnd }: { onEnd: () => void }) => {
     const { voice = null, text = "", rate = 1, pitch = 1, volume = 1 } = args;
     if (!supported) return;
     setSpeaking(true);
+    onStart();
 
     // Firefox won't repeat an utterance that has been
     // spoken, so we need to create a new instance each time
