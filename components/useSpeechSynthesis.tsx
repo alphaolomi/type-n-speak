@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 
+interface UseSpeechSynthesisReturn {
+  onEnd?: () => void;
+  onStart?: () => void;
+}
+
 /**
  * useSpeechSynthesis
- * 
- * ## Params 
- * - `onStart` called when starting speaking, 
+ *
+ * ## Params
+ * - `onStart` called when starting speaking,
  * - `onEnd` called when end speaking
- * 
- * 
+ *
+ *
  * ```typescript
  * const useSpeechSynthesis: ({ onStart, onEnd, }: {
  *     onEnd?: (() => void) | undefined;
@@ -30,10 +35,7 @@ import { useEffect, useState } from "react";
 export const useSpeechSynthesis = ({
   onStart = () => {},
   onEnd = () => {},
-}: {
-  onEnd?: () => void;
-  onStart?: () => void;
-}) => {
+}: UseSpeechSynthesisReturn) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[] | null>(null);
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
